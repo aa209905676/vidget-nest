@@ -1,19 +1,34 @@
-import { Controller, Post, Body, Get, Query, HttpException, HttpStatus, ValidationPipe } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Query,
+  HttpException,
+  HttpStatus,
+  ValidationPipe,
+} from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
-import { ParseVideoCommand, BatchParseVideoCommand } from '../../application/commands/parse-video.command';
-import { CheckUrlQuery, GetVersionQuery } from '../../application/queries/check-url.query';
-import { 
-  ParseVideoRequestDto, 
-  BatchParseVideoRequestDto, 
-  CheckUrlRequestDto 
+import {
+  ParseVideoCommand,
+  BatchParseVideoCommand,
+} from '../../application/commands/parse-video.command';
+import {
+  CheckUrlQuery,
+  GetVersionQuery,
+} from '../../application/queries/check-url.query';
+import {
+  ParseVideoRequestDto,
+  BatchParseVideoRequestDto,
+  CheckUrlRequestDto,
 } from '../../application/dtos/parse-request.dto';
 import {
   VideoInfoResponseDto,
   BatchVideoInfoResponseDto,
   CheckUrlResponseDto,
-  VersionResponseDto
+  VersionResponseDto,
 } from '../../application/dtos/parse-response.dto';
 
 /**
@@ -32,7 +47,11 @@ export class DouyinController {
    * 解析单个抖音视频链接
    */
   @ApiOperation({ summary: '解析抖音视频' })
-  @ApiResponse({ status: 200, description: '解析成功', type: VideoInfoResponseDto })
+  @ApiResponse({
+    status: 200,
+    description: '解析成功',
+    type: VideoInfoResponseDto,
+  })
   @ApiResponse({ status: 400, description: '无效的请求参数' })
   @ApiResponse({ status: 500, description: '服务器内部错误' })
   @Post('parse')
@@ -40,7 +59,7 @@ export class DouyinController {
     @Body(new ValidationPipe({ transform: true })) dto: ParseVideoRequestDto,
   ): Promise<VideoInfoResponseDto> {
     try {
-      const command = new ParseVideoCommand(dto.shareUrl);
+      const command = new ParseVideoCommand(dto.url);
       return await this.commandBus.execute(command);
     } catch (error) {
       throw new HttpException(
@@ -57,12 +76,17 @@ export class DouyinController {
    * 批量解析抖音视频链接
    */
   @ApiOperation({ summary: '批量解析抖音视频' })
-  @ApiResponse({ status: 200, description: '解析成功', type: BatchVideoInfoResponseDto })
+  @ApiResponse({
+    status: 200,
+    description: '解析成功',
+    type: BatchVideoInfoResponseDto,
+  })
   @ApiResponse({ status: 400, description: '无效的请求参数' })
   @ApiResponse({ status: 500, description: '服务器内部错误' })
   @Post('batch-parse')
   async batchParseVideos(
-    @Body(new ValidationPipe({ transform: true })) dto: BatchParseVideoRequestDto,
+    @Body(new ValidationPipe({ transform: true }))
+    dto: BatchParseVideoRequestDto,
   ): Promise<BatchVideoInfoResponseDto> {
     try {
       const command = new BatchParseVideoCommand(dto.shareUrls);
@@ -82,7 +106,11 @@ export class DouyinController {
    * 检查URL是否为有效的抖音链接
    */
   @ApiOperation({ summary: '检查URL是否为有效的抖音链接' })
-  @ApiResponse({ status: 200, description: '检查成功', type: CheckUrlResponseDto })
+  @ApiResponse({
+    status: 200,
+    description: '检查成功',
+    type: CheckUrlResponseDto,
+  })
   @ApiResponse({ status: 400, description: '无效的请求参数' })
   @ApiResponse({ status: 500, description: '服务器内部错误' })
   @Post('check-url')
@@ -107,7 +135,11 @@ export class DouyinController {
    * 获取版本信息
    */
   @ApiOperation({ summary: '获取版本信息' })
-  @ApiResponse({ status: 200, description: '获取成功', type: VersionResponseDto })
+  @ApiResponse({
+    status: 200,
+    description: '获取成功',
+    type: VersionResponseDto,
+  })
   @ApiResponse({ status: 500, description: '服务器内部错误' })
   @Get('version')
   async getVersion(): Promise<VersionResponseDto> {
@@ -124,4 +156,4 @@ export class DouyinController {
       );
     }
   }
-} 
+}

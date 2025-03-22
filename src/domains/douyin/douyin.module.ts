@@ -8,6 +8,7 @@ import { DouyinController } from './interfaces/controllers/douyin.controller';
 // 应用层 - 命令和查询处理器
 import { ParseVideoHandler } from './application/handlers/parse-video.handler';
 import { CheckUrlHandler, GetVersionHandler } from './application/handlers/check-url.handler';
+import { ParseVideoCommandHandler, BatchParseVideoCommandHandler } from './application/commands/commands-handlers';
 
 // 领域层 - 服务
 import { VideoParserService } from './domain/services/video-parser.service';
@@ -17,7 +18,7 @@ import { ApiVideoRepository } from './infrastructure/repositories/api-video.repo
 import { DouyinApiClient } from './infrastructure/http/douyin-api.client';
 
 // 命令和查询处理器列表
-const CommandHandlers = [ParseVideoHandler];
+const CommandHandlers = [ParseVideoCommandHandler, BatchParseVideoCommandHandler];
 const QueryHandlers = [CheckUrlHandler, GetVersionHandler];
 
 // 领域服务列表
